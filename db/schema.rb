@@ -10,21 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_28_095426) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_29_020421) do
   create_table "amenities", force: :cascade do |t|
     t.string "name"
+    t.integer "photo_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "photo_id"
     t.index ["photo_id"], name: "index_amenities_on_photo_id"
   end
 
   create_table "beds", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.decimal "length", precision: 10, scale: 2
     t.decimal "width", precision: 10, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "categories", force: :cascade do |t|
@@ -34,10 +34,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_28_095426) do
   end
 
   create_table "location_photos", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.integer "photo_id"
     t.integer "location_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["location_id"], name: "index_location_photos_on_location_id"
     t.index ["photo_id"], name: "index_location_photos_on_photo_id"
   end
@@ -71,19 +71,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_28_095426) do
     t.string "guest_special_needs"
     t.date "check_in_date"
     t.date "check_out_date"
-    t.date "adults_count"
-    t.date "children_count"
-    t.decimal "total_bill"
+    t.integer "adults_count"
+    t.integer "children_count"
+    t.decimal "total_bill", precision: 10, scale: 2
     t.time "reservation_timestamp"
     t.boolean "checkin_confirmed"
     t.boolean "checkout_confirmed"
     t.boolean "room_key_returned"
     t.string "review"
     t.time "review_timestamp"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.integer "user_id"
     t.integer "room_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["room_id"], name: "index_reservations_on_room_id"
     t.index ["user_id"], name: "index_reservations_on_user_id"
   end
@@ -98,20 +98,20 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_28_095426) do
   end
 
   create_table "room_beds", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer "count"
     t.integer "bed_id"
     t.integer "room_id"
-    t.integer "count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["bed_id"], name: "index_room_beds_on_bed_id"
     t.index ["room_id"], name: "index_room_beds_on_room_id"
   end
 
   create_table "room_categories", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.integer "room_id"
     t.integer "category_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_room_categories_on_category_id"
     t.index ["room_id"], name: "index_room_categories_on_room_id"
   end
@@ -120,19 +120,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_28_095426) do
     t.integer "room_num"
     t.integer "floor_num"
     t.boolean "is_smoke_free", default: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.boolean "is_under_maintenance", default: false
     t.integer "room_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["room_id"], name: "index_room_numbers_on_room_id"
     t.index ["room_num", "floor_num"], name: "index_room_numbers_on_room_num_and_floor_num", unique: true
   end
 
   create_table "room_photos", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.integer "room_id"
     t.integer "photo_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["photo_id"], name: "index_room_photos_on_photo_id"
     t.index ["room_id"], name: "index_room_photos_on_room_id"
   end
@@ -147,11 +147,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_28_095426) do
     t.integer "max_guests"
     t.integer "bedroom_count"
     t.decimal "price"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.integer "featured_amenity_id"
     t.integer "location_id"
     t.integer "category_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_rooms_on_category_id"
     t.index ["location_id"], name: "index_rooms_on_location_id"
   end
@@ -189,5 +189,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_28_095426) do
   add_foreign_key "room_numbers", "rooms", on_delete: :cascade
   add_foreign_key "room_photos", "photos", on_delete: :cascade
   add_foreign_key "room_photos", "rooms", on_delete: :cascade
+  add_foreign_key "rooms", "categories"
   add_foreign_key "rooms", "locations"
 end

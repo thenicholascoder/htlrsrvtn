@@ -6,12 +6,13 @@ class CreateRooms < ActiveRecord::Migration[7.1]
       t.string :section_name
       t.string :section_title
       t.string :section_desc
-      t.decimal :suite_size
-      t.decimal :max_guests
-      t.decimal :bedroom_count
-      t.decimal :room_count
+      t.integer :suite_size
+      t.integer :max_guests
+      t.integer :bedroom_count
       t.decimal :price
-
+      t.integer :featured_amenity_id
+      t.references :location, foreign_key: true
+      t.references :category, foreign_key: true
       t.timestamps
     end
   end
