@@ -3,7 +3,6 @@ class User < ApplicationRecord
   has_many :rooms, through: :reservations
   # getter and setter, it creates an attribute for your current User model even without value yet
   attr_accessor :remember_token, :activation_token
-  before_save :downcase_email
   before_create :create_activation_digest
   before_save { self.email = email.downcase }
   normalizes :email, with: ->(email) {email.strip.downcase}
@@ -75,12 +74,12 @@ class User < ApplicationRecord
 
   private
 
-  def downcase_email
-    # you are also calling self.email if you use email within user model
-    # self.email = email.downcase
-    # push the changes
-    email.downcase!
-  end
+  # def downcase_email
+  #   # you are also calling self.email if you use email within user model
+  #   # self.email = email.downcase
+  #   # push the changes
+  #   email.downcase!
+  # end
 
 
   def create_activation_digest
